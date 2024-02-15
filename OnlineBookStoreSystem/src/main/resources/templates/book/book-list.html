@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book List</title>
+    <style>
+        /* CSS styles for table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Book List</h1>
+    
+    <!-- Button to add a new book -->
+    <button onclick="window.location.href='/addBook'">Add New Book</button><br><br>
+    
+    <!-- Table to display books -->
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="bookList">
+            <!-- Books will be dynamically inserted here -->
+        </tbody>
+    </table>
+
+    <!-- JavaScript code to fetch and display books -->
+    <script>
+        fetch('/api/books')
+            .then(response => response.json())
+            .then(books => {
+                const bookList = document.getElementById('bookList');
+                bookList.innerHTML = ''; // Clear existing content
+
+                books.forEach(book => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${book.title}</td>
+                        <td>${book.author}</td>
+                        <td>${book.price}</td>
+                        <td>
+                            <button onclick="editBook(${book.id})">Edit</button>
+                            <button onclick="deleteBook(${book.id})">Delete</button>
+                        </td>
+                    `;
+                    bookList.appendChild(row);
+                });
+            })
+            .catch(error => console.error('Error fetching books:', error));
+
+        function editBook(bookId) {
+            window.location.href = '/book-form.html?bookId=' + bookId;
+        }
+
+        function deleteBook(bookId) {
+            if (confirm('Are you sure you want to delete this book?')) {
+                fetch(`/api/books/${bookId}`, { method: 'DELETE' })
+                    .then(response => {
+                        if (response.ok) {
+                            alert('Book deleted successfully');
+                            window.location.reload(); // Refresh page after deletion
+                        } else {
+                            alert('Failed to delete book');
+                        }
+                    })
+                    .catch(error => console.error('Error deleting book:', error));
+            }
+        }
+    </script>
+</body>
+</html>

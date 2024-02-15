@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Bookstore</title>
+    <style>
+        /* CSS styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .book-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .book {
+            margin: 10px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 250px;
+            text-align: center;
+        }
+        .book img {
+            max-width: 100%;
+            height: auto;
+        }
+        .book h3 {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+        .book p {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to our Online Bookstore</h1>
+        <div class="book-list" id="bookList">
+            <!-- Book details will be dynamically added here -->
+        </div>
+    </div>
+
+    <script>
+        // JavaScript code for fetching book details from the backend
+        window.onload = function() {
+            fetch('/api/books') // Assuming this endpoint returns a list of books in JSON format
+                .then(response => response.json())
+                .then(data => {
+                    const bookList = document.getElementById('bookList');
+                    data.forEach(book => {
+                        const bookDiv = document.createElement('div');
+                        bookDiv.className = 'book';
+                        bookDiv.innerHTML = `
+                            <img src="${book.imageUrl}" alt="Book Cover">
+                            <h3>${book.title}</h3>
+                            <p>Author: ${book.author}</p>
+                            <p>Price: $${book.price}</p>
+                            <button>Add to Cart</button>
+                        `;
+                        bookList.appendChild(bookDiv);
+                    });
+                })
+                .catch(error => console.error('Error fetching books:', error));
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <link rel="stylesheet" href="/static/css/style.css"> <!-- Link to your CSS file -->
+</head>
+<body>
+    <h1>Shopping Cart</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Iterate over each item in the cart and display its details -->
+            {{#cartItems}}
+            <tr>
+                <td>{{ book.title }}</td>
+                <td>{{ book.author }}</td>
+                <td>${{ book.price }}</td>
+                <td>{{ quantity }}</td>
+                <td>${{ total }}</td>
+            </tr>
+            {{/cartItems}}
+        </tbody>
+    </table>
+    <p>Total Price: ${{ totalPrice }}</p>
+    <a href="/cart/checkout">Proceed to Checkout</a> <!-- Link to proceed to checkout -->
+</body>
+</html>
